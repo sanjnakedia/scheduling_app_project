@@ -1,0 +1,42 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   <div class = "fixed-background">
+        <div class="row dark text-center">
+
+        <div class = "narrow text-center">
+            <div class = "col-12">
+                <h3 class="heading">Enter Your Information!</h3>
+                <div class = "heading-underline"></div>
+            </div>
+            
+            <form action = "/"  method = "post" class="needs-validation">
+                <p>Name</p>    
+                <div class="form-group">
+                  <input class="form-control" id="inputName" name="name" placeholder="Enter your name here" required>
+                  <div class="invalid-feedback">Please enter your name</div>
+                </div>
+                <p>Calendar</p>    
+                <div class="form-group">
+                  <select class="form-control" name="calendar">
+                      <option>Manually</option>
+                      <option>Google Calendar</option>
+                  </select>             
+                </div>
+                <p>Time Zone</p>    
+                <div class="form-group">
+                  <select class="form-control" name="time_zone">
+                      <option>EST</option>
+                      <option>PST</option>
+                      <option>Other</option>
+                  </select>             
+                </div>
+
+                <br>
+                <button class="btn btn-secondary" type="submit">Submit</button>
+              </form>  
+        </div>        
+    </div>
+
+    <div class = "fixed-wrap">
+        <div class ="fixed">
+        </div>
+    </div>

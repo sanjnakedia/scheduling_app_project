@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Scheduling Application</title>\
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border:1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+    </style>
+    <style>
+        /* Optional: Additional CSS for table rows and cells highlighting */
+        .highlight { 
+        background-color: yellow;
+        border-color: orange;
+        color: black; }
+        /* Style for hovering over table cells */
+        td:hover {
+        background-color: #ffff99; /* Lighter yellow to indicate hover state */
+        }
+    </style>
+</head>
+
+
+    <table class="table">
+        <!-- Your existing table structure -->
+    </table>
+
+
+
+<body>
+    <h1>Sanj and Rez Weekly Scheduling</h1>
+    <div class="container mt-5">
+        <div class="container mt-5">
+            <button id="clearSelection" class="btn btn-warning">Clear Selection</button> <!-- Bootstrap styled button -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Time</th> <!-- Left-hand side column header -->
+                    <th scope="col">Monday</th>
+                    <th scope="col">Tuesday</th>
+                    <th scope="col">Wednesday</th>
+                    <th scope="col">Thursday</th>
+                    <th scope="col">Friday</th>
+                    <th scope="col">Saturday</th>
+                    <th scope="col">Sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Row for 9 AM -->
+                <tr>
+                    <td>9-10 AM</td> <!-- Time slot -->
+                    <td id="monday-9-10"></td> <!-- Data cells for each day can be filled as needed -->
+                    <td id="tuesday-9-10"></td>
+                    <td id="wednesday-9-10"></td>
+                    <td id="thursday-9-10"></td>
+                    <td id="friday-9-10"></td>
+                    <td id="saturday-9-10"></td>
+                    <td id="sunday-9-10"></td>
+                </tr>
+                <tr>
+                    <td>10-11 AM</td>
+                    <td id="monday-10-11"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-10-11"></td>
+                    <td id="wednesday-10-11"></td>
+                    <td id="thursday-10-11"></td>
+                    <td id="friday-10-11"></td>
+                    <td id="saturday-10-11"></td>
+                    <td id="sunday-10-11"></td>
+                </tr>
+                <tr>
+                    <td>11-12 PM</td>
+                    <td id="monday-11-12"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-11-12"></td>
+                    <td id="wednesday-11-12"></td>
+                    <td id="thursday-11-12"></td>
+                    <td id="friday-11-12"></td>
+                    <td id="saturday-11-12"></td>
+                    <td id="sunday-11-12"></td>
+                </tr>
+                <tr>
+                    <td>12-1 PM</td>
+                    <td id="monday-12-1"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-12-1"></td>
+                    <td id="wednesday-12-1"></td>
+                    <td id="thursday-12-1"></td>
+                    <td id="friday-12-1"></td>
+                    <td id="saturday-12-1"></td>
+                    <td id="sunday-12-1"></td>
+                </tr>
+                <tr>
+                    <td>1-2 PM</td>
+                    <td id="monday-1-2"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-1-2"></td>
+                    <td id="wednesday-1-2"></td>
+                    <td id="thursday-1-2"></td>
+                    <td id="friday-1-2"></td>
+                    <td id="saturday-1-2"></td>
+                    <td id="sunday-1-2"></td>
+                </tr>
+                <tr>
+                    <td>2-3 PM</td>
+                    <td id="monday-2-3"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-2-3"></td>
+                    <td id="wednesday-2-3"></td>
+                    <td id="thursday-2-3"></td>
+                    <td id="friday-2-3"></td>
+                    <td id="saturday-2-3"></td>
+                    <td id="sunday-2-3"></td>
+                </tr>
+                <tr>
+                    <td>3-4 PM</td>
+                    <td id="monday-3-4"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-3-4"></td>
+                    <td id="wednesday-3-4"></td>
+                    <td id="thursday-3-4"></td>
+                    <td id="friday-3-4"></td>
+                    <td id="saturday-3-4"></td>
+                    <td id="sunday-3-4"></td>
+                </tr>
+                <tr>
+                    <td>4-5 PM</td>
+                    <td id="monday-4-5"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-4-5"></td>
+                    <td id="wednesday-4-5"></td>
+                    <td id="thursday-4-5"></td>
+                    <td id="friday-4-5"></td>
+                    <td id="saturday-4-5"></td>
+                    <td id="sunday-4-5"></td>
+                </tr>
+                <tr>
+                    <td>5-6 PM</td>
+                    <td id="monday-5-6"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-5-6"></td>
+                    <td id="wednesday-5-6"></td>
+                    <td id="thursday-5-6"></td>
+                    <td id="friday-5-6"></td>
+                    <td id="saturday-5-6"></td>
+                    <td id="sunday-5-6"></td>
+                </tr>
+                <tr>
+                    <td>6-7 PM</td>
+                    <td id="monday-6-7"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-6-7"></td>
+                    <td id="wednesday-6-7"></td>
+                    <td id="thursday-6-7"></td>
+                    <td id="friday-6-7"></td>
+                    <td id="saturday-6-7"></td>
+                    <td id="sunday-6-7"></td>
+                </tr>
+                <tr>
+                    <td>7-8 PM</td>
+                    <td id="monday-7-8"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-7-8"></td>
+                    <td id="wednesday-7-8"></td>
+                    <td id="thursday-7-8"></td>
+                    <td id="friday-7-8"></td>
+                    <td id="saturday-7-8"></td>
+                    <td id="sunday-7-8"></td>
+                </tr>
+                <tr>
+                    <td>8-9 PM</td>
+                    <td id="monday-8-9"></td> <!-- Repeat for the rest of the days -->
+                    <td id="tuesday-8-9"></td>
+                    <td id="wednesday-8-9"></td>
+                    <td id="thursday-8-9"></td>
+                    <td id="friday-8-9"></td>
+                    <td id="saturday-8-9"></td>
+                    <td id="sunday-8-9"></td>
+                </tr>
+            </tbody>
+        </table>  
+        <button id="proceedToRank" class="btn btn-primary mt-3">Proceed to Rank Selections</button>    
+    </div>  
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        let isSelecting = false;
+    
+        function clearHighlights() {
+            $('.highlight').removeClass('highlight');
+        }
+    
+        $('#clearSelection').click(function() {
+            clearHighlights();
+        });
+    
+        $(document).keydown(function(e) {
+            if (e.key === "Escape") {
+                clearHighlights();
+            }
+        });
+    
+        $('.table td').mousedown(function(e) {
+            e.preventDefault();
+            isSelecting = true;
+            $(this).addClass('highlight');
+        }).mouseenter(function() {
+            if (isSelecting) {
+                $(this).addClass('highlight');
+            }
+        });
+    
+        $(document).mouseup(function() {
+            isSelecting = false;
+        });
+    
+        $(document).click(function(e) {
+            if (!$(e.target).closest('.table').length && !$(e.target).is('#clearSelection')) {
+                clearHighlights();
+            }
+            
+        });
+
+
+    // This part handles the "Proceed to Rank Selections" button click
+    $('#proceedToRank').click(function() {
+        // Gather all highlighted cell IDs
+        let selectedCells = $('.highlight').map(function() { return this.id; }).get();
+        
+        // Store the selected cell IDs in local storage
+        localStorage.setItem('selectedCells', JSON.stringify(selectedCells));
+        
+        // Redirect to ranking page
+        window.location.href = '/rank';  // Use the Flask route for the ranking page
+    });
+    });
+    </script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="{{(static/js/filename='js/rank.js') }}"></script>
+<body>
+</html>

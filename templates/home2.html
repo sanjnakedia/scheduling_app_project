@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integration Example</title>
+    <meta charset="utf-8" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script async defer src="https://apis.google.com/js/api.js"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="handleClientLoad()"></script>
+    <style>
+        #authorize_google_calendar {
+            display: none; /* Hide the button by default */
+        }
+    </style>
+</head>
+<body>
+    <div class="fixed-background">
+        <div class="row dark text-center">
+            <div class="narrow text-center">
+                <div class="col-12">
+                    <h3 class="heading">Enter Your Information!</h3>
+                    <div class="heading-underline"></div>
+                </div>
+
+                <form action="/" method="post" class="needs-validation">
+                    <p>Name</p>
+                    <div class="form-group">
+                        <input class="form-control" id="inputName" name="name" placeholder="Enter your name here" required>
+                        <div class="invalid-feedback">Please enter your name</div>
+                    </div>
+                    <p>Calendar</p>
+                    <div class="form-group">
+                        <select class="form-control" name="calendar">
+                            <option>Manually</option>
+                            <option value="Google Calendar">Google Calendar</option>
+                        </select>
+                    </div>
+                    <p>Time Zone</p>
+                    <div class="form-group">
+                        <select class="form-control" name="time_zone">
+                            <option>EST</option>
+                            <option>PST</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <button id="authorize_google_calendar" type="button" class="btn btn-primary">Authorize Google Calendar</button>
+                    <br>
+                    <button class="btn btn-secondary" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-wrap">
+        <div class="fixed"></div>
+    </div>
+
+    <script type="text/javascript">
+        let tokenClient;
+        let gapiInited = false;
+
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: 'AIzaSyBfm9HkAaz0QHywslqAe_6ycP6OQJin1Dc',
+                clientId: '292805797097-p4h5fmc38q4sci3o9p3b6kvtc77d4130.apps.googleusercontent.com',
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+                scope: 'https://www.googleapis.com/auth/calendar.readonly'
+            }).then(function () {
+                gapiInited = true;
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                document.getElementById('authorize_google_calendar').onclick = handleAuthClick;
+            }, function(error) {
+                console.log(error);
+            });
+        }
+
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                listUpcomingEvents();
+            }
+        }
+
+        function handleAuthClick(event) {
+            if (!gapiInited) {
+                console.log('GAPI client not initialized');
+                return;
+            }
+            gapi.auth2.getAuthInstance().signIn();
+        }
+
+        function listUpcomingEvents() {
+            // Function to list events or handle calendar data
+        }
+
+        document.querySelector('select[name="calendar"]').addEventListener('change', function(e) {
+            if (e.target.value === 'Google Calendar') {
+                document.getElementById('authorize_google_calendar').style.display = 'block';
+            } else {
+                document.getElementById('authorize_google_calendar').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
