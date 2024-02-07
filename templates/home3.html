@@ -1,0 +1,49 @@
+function gapiLoaded() {
+    gapi.load('client', initializeGapiClient);
+  }
+
+    function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+        gapi.client.init({
+            apiKey: 'AIzaSyBfm9HkAaz0QHywslqAe_6ycP6OQJin1Dc',
+            clientId: '292805797097-p4h5fmc38q4sci3o9p3b6kvtc77d4130.apps.googleusercontent.com',
+            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+            scope: 'https://www.googleapis.com/auth/calendar.readonly'
+        }).then(function () {
+            gapiInited = true;
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            document.getElementById('authorize_google_calendar').onclick = handleAuthClick;
+        }, function(error) {
+            console.log(error);
+        });
+    }
+
+    function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+            listUpcomingEvents();
+        }
+    }
+
+    function handleAuthClick(event) {
+        if (!gapiInited) {
+            console.log('GAPI client not initialized');
+            return;
+        }
+        gapi.auth2.getAuthInstance().signIn();
+    }
+
+    function listUpcomingEvents() {
+        // Function to list events or handle calendar data
+    }
+
+    document.querySelector('select[name="calendar"]').addEventListener('change', function(e) {
+        if (e.target.value === 'Google Calendar') {
+            document.getElementById('authorize_google_calendar').style.display = 'block';
+        } else {
+            document.getElementById('authorize_google_calendar').style.display = 'none';
+        }
+    });
