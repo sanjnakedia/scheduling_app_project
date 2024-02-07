@@ -26,8 +26,6 @@ def rankings():
 
     return render_template('rank.html', selected_time_blocks=selected_time_blocks)
 
-
-
 @app.route('/rank')
 def rank():
     return render_template('rank.html')
