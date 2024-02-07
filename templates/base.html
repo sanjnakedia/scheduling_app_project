@@ -2,11 +2,19 @@
 <html lang="en">
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <title>Scheduling Application</title>\
     <style>
+        h1 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 2.5rem; /* You can adjust the size as you like */
+            margin-top: 20px; /* Adjust the top margin as needed */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -39,7 +47,14 @@
 
 
 <body>
-    <h1>Sanj and Rez Weekly Scheduling</h1>
+    <style>
+        h1 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 2.5rem; /* You can adjust the size as you like */
+            margin-top: 20px; /* Adjust the top margin as needed */
+        }
+    </style>    
     <div class="container mt-5">
         <div class="container mt-5">
             <button id="clearSelection" class="btn btn-warning">Clear Selection</button> <!-- Bootstrap styled button -->
@@ -240,6 +255,7 @@
     });
     </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="{{(static/js/filename='js/rank.js') }}"></script>
+<script src="{{ url_for('static', filename='js/rank.js') }}"></script>
+"></script>
 <body>
 </html>

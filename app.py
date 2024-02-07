@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, json, url_for
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -15,7 +16,17 @@ def home():
 
 @app.route("/schedule")
 def scheduler():
-    return render_template("base.html")
+    return render_template("base2.html")
+
+
+@app.route('/rankings', methods=['POST'])
+def rankings():
+    selected_time_blocks_str = request.form.get('selectedTimeBlocks', '[]')  # Default to an empty list as a string if not found
+    selected_time_blocks = json.loads(selected_time_blocks_str)  # Parse the JSON string into a Python list
+
+    return render_template('rank.html', selected_time_blocks=selected_time_blocks)
+
+
 
 @app.route('/rank')
 def rank():
