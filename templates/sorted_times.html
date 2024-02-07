@@ -7,7 +7,7 @@
     <div class="container mt-5">
         <h1>Sorted Time Blocks</h1>
 
-        <h2>The Most Preferred Times</h2>
+        <h2>Most Preferred Time Slots</h2>
         <ul>
             {% if time_blocks['1'] %}
                 {% for block in time_blocks['1'] %}
@@ -18,7 +18,7 @@
             {% endif %}
         </ul>
 
-        <h2>If Needed Times</h2>
+        <h2>Second Choice Time Slots</h2>
         <ul>
             {% if time_blocks['2'] %}
                 {% for block in time_blocks['2'] %}
@@ -29,7 +29,7 @@
             {% endif %}
         </ul>
 
-        <h2>Please Don't Schedule Now Times</h2>
+        <h2>Least Preferred (only if needed) Time Slots</h2>
         <ul>
             {% if time_blocks['3'] %}
                 {% for block in time_blocks['3'] %}
