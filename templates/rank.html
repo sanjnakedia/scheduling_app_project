@@ -9,14 +9,30 @@
 <body>
     <div class="container mt-5">
         <h1>Selected Time Blocks for Ranking</h1>
-        <ul>
-            {% for block in selected_time_blocks %}
-                {% set parts = block.split('-') %}
-                <li>{{ parts[0]|capitalize }}: {{ parts[1] }} - {{ parts[2] }}</li>
-            {% else %}
-                <li>No time blocks selected.</li>
-            {% endfor %}
-        </ul>        
+        <form action="/submit-rankings" method="post">
+            <ul>
+                {% for block in selected_time_blocks %}
+        
+                    {% set parts = block.split('-') %}
+                    <li>
+                        {{ block }}
+                        <input type="hidden" name="time_block_{{ loop.index }}" value="{{ block }}">
+                        {{ parts[0]|capitalize }}: {{ parts[1] }} - {{ parts[2] }}
+                        <select name="ranking_{{ loop.index }}" class="custom-select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </li>
+                {% else %}
+                    <li>No time blocks selected.</li>
+                {% endfor %}
+            </ul>
+            <input type="hidden" name="num_time_blocks" value="{{ selected_time_blocks|length }}">
+
+            <button type="submit" class="btn btn-primary mt-3">Submit Rankings</button>
+            
+        </form>        
     </div>
 </body>
 </html>

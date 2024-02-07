@@ -37,6 +37,30 @@ def results():
     # This route would handle displaying the rankings.
     # You might retrieve the rankings from localStorage or wherever they are stored.
     return render_template('results.html')
+    
+@app.route('/submit-rankings', methods=['POST'])
+def submit_rankings():
+    print("Form data:", request.form)
+    # Example data structure to hold the sorted time blocks
+    time_blocks = {
+        '1': [],  # Most preferred times
+        '2': [],  # If needed times
+        '3': []   # Please don't schedule times
+    }
+    
+    # Assuming the number of time blocks is passed in some form field
+    num_blocks = int(request.form.get('num_time_blocks', 0))
+    
+    for i in range(1, num_blocks + 1):
+        time_block = request.form.get(f'time_block_{i}')
+        ranking = request.form.get(f'ranking_{i}')
+        if ranking in time_blocks:
+            time_blocks[ranking].append(time_block)
+    
+    # Pass the sorted time blocks to the template
+    return render_template('sorted_times.html', time_blocks=time_blocks)
+
+
 
 #class Schedule
 

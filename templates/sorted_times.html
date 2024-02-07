@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... -->
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Sorted Time Blocks</h1>
+
+        <h2>The Most Preferred Times</h2>
+        <ul>
+            {% if time_blocks['1'] %}
+                {% for block in time_blocks['1'] %}
+                    <li>{{ block }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No preferred times selected.</li>
+            {% endif %}
+        </ul>
+
+        <h2>If Needed Times</h2>
+        <ul>
+            {% if time_blocks['2'] %}
+                {% for block in time_blocks['2'] %}
+                    <li>{{ block }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No 'if needed' times selected.</li>
+            {% endif %}
+        </ul>
+
+        <h2>Please Don't Schedule Now Times</h2>
+        <ul>
+            {% if time_blocks['3'] %}
+                {% for block in time_blocks['3'] %}
+                    <li>{{ block }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No 'please don't schedule' times selected.</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>
