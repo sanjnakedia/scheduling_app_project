@@ -23,6 +23,15 @@
         td:hover {
             background-color: #ffff99;
         }
+
+        .gray-out {
+        background-color: #cccccc !important;
+        }
+        .green-highlight {
+        background-color: #00FF00; /* Green background */
+        }
+</style>
+
     </style>
 </head>
 <body>
@@ -44,10 +53,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Row for 9 AM -->
                     <tr>
-                        <td>9-10 AM</td> <!-- Time slot -->
-                        <td id="monday-9-10"></td> <!-- Data cells for each day can be filled as needed -->
+                        <td>9-10 AM</td> 
+                        <td id="monday-9-10"></td> 
                         <td id="tuesday-9-10"></td>
                         <td id="wednesday-9-10"></td>
                         <td id="thursday-9-10"></td>
@@ -57,7 +65,7 @@
                     </tr>
                     <tr>
                         <td>10-11 AM</td>
-                        <td id="monday-10-11"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-10-11"></td> 
                         <td id="tuesday-10-11"></td>
                         <td id="wednesday-10-11"></td>
                         <td id="thursday-10-11"></td>
@@ -67,7 +75,7 @@
                     </tr>
                     <tr>
                         <td>11-12 PM</td>
-                        <td id="monday-11-12"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-11-12"></td>
                         <td id="tuesday-11-12"></td>
                         <td id="wednesday-11-12"></td>
                         <td id="thursday-11-12"></td>
@@ -77,7 +85,7 @@
                     </tr>
                     <tr>
                         <td>12-1 PM</td>
-                        <td id="monday-12-1"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-12-1"></td> 
                         <td id="tuesday-12-1"></td>
                         <td id="wednesday-12-1"></td>
                         <td id="thursday-12-1"></td>
@@ -87,7 +95,7 @@
                     </tr>
                     <tr>
                         <td>1-2 PM</td>
-                        <td id="monday-1-2"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-1-2"></td>
                         <td id="tuesday-1-2"></td>
                         <td id="wednesday-1-2"></td>
                         <td id="thursday-1-2"></td>
@@ -97,7 +105,7 @@
                     </tr>
                     <tr>
                         <td>2-3 PM</td>
-                        <td id="monday-2-3"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-2-3"></td> 
                         <td id="tuesday-2-3"></td>
                         <td id="wednesday-2-3"></td>
                         <td id="thursday-2-3"></td>
@@ -107,7 +115,7 @@
                     </tr>
                     <tr>
                         <td>3-4 PM</td>
-                        <td id="monday-3-4"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-3-4"></td> 
                         <td id="tuesday-3-4"></td>
                         <td id="wednesday-3-4"></td>
                         <td id="thursday-3-4"></td>
@@ -117,7 +125,7 @@
                     </tr>
                     <tr>
                         <td>4-5 PM</td>
-                        <td id="monday-4-5"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-4-5"></td> 
                         <td id="tuesday-4-5"></td>
                         <td id="wednesday-4-5"></td>
                         <td id="thursday-4-5"></td>
@@ -127,7 +135,7 @@
                     </tr>
                     <tr>
                         <td>5-6 PM</td>
-                        <td id="monday-5-6"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-5-6"></td> 
                         <td id="tuesday-5-6"></td>
                         <td id="wednesday-5-6"></td>
                         <td id="thursday-5-6"></td>
@@ -137,7 +145,7 @@
                     </tr>
                     <tr>
                         <td>6-7 PM</td>
-                        <td id="monday-6-7"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-6-7"></td> 
                         <td id="tuesday-6-7"></td>
                         <td id="wednesday-6-7"></td>
                         <td id="thursday-6-7"></td>
@@ -147,7 +155,7 @@
                     </tr>
                     <tr>
                         <td>7-8 PM</td>
-                        <td id="monday-7-8"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-7-8"></td> 
                         <td id="tuesday-7-8"></td>
                         <td id="wednesday-7-8"></td>
                         <td id="thursday-7-8"></td>
@@ -157,7 +165,7 @@
                     </tr>
                     <tr>
                         <td>8-9 PM</td>
-                        <td id="monday-8-9"></td> <!-- Repeat for the rest of the days -->
+                        <td id="monday-8-9"></td> 
                         <td id="tuesday-8-9"></td>
                         <td id="wednesday-8-9"></td>
                         <td id="thursday-8-9"></td>
@@ -167,53 +175,75 @@
                     </tr>
                 </tbody>
             </table>
-        <input type="hidden" name="selectedTimeBlocks" id="selectedTimeBlocksInput">
-        <button id="proceedToRank" class="btn btn-primary mt-3">Proceed to Rank Selections</button>
+        <button id="nextButton" class="btn btn-primary" style="display: none;">Next</button>
+        <button id="saveSelection" class="btn btn-success">Save Selection</button>
         </form>
-        <div id="selectedTimeBlocks" class="mt-3">
-            <h3>Selected Time Blocks:</h3>
-            <ul id="timeBlockList"></ul>
-        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            let isSelecting = false;
-            let selectionMode = null; // Track if we are in selection or deselection mode
-
+            let isDragging = false; // Indicates if we are currently dragging
+            let selectionAllowed = true; // Initially, selection is allowed
+            let reselectPhase = false; // Track reselection phase
+            let dragStartState = null; // Track the state at the start of the drag ('select' for green-highlight, null otherwise)
+        
+            // Clear Selection button logic
             $('#clearSelection').click(function() {
-                $('.highlight').removeClass('highlight');
+                $('.highlight, .green-highlight').removeClass('highlight green-highlight');
+                $('.table td').removeClass('gray-out'); // Remove gray-out from all cells
+                selectionAllowed = true; // Re-enable selection
+                reselectPhase = false; // Reset reselection phase
             });
-
-            $(document).keydown(function(e) {
-                if (e.key === "Escape") {
-                    $('.highlight').removeClass('highlight');
-                }
-            });
-
-            $('.table td').mousedown(function(e) {
+        
+            // Save Selection button logic
+            $('#saveSelection').click(function(e) {
                 e.preventDefault();
-                isSelecting = true;
-                // Determine the selection mode based on the first cell clicked
-                selectionMode = $(this).hasClass('highlight') ? 'deselect' : 'select';
-                // Toggle the first cell based on the selection mode
-                $(this).toggleClass('highlight', selectionMode === 'select');
-            }).mouseenter(function() {
-                if (isSelecting) {
-                    // Add or remove highlight based on the selection mode
-                    $(this).toggleClass('highlight', selectionMode === 'select');
+                $('.table td').not('.highlight').addClass('gray-out'); // Gray out unhighlighted cells
+                selectionAllowed = false; // Disable further selection
+                reselectPhase = true; // Enable reselection phase
+                alert("Please select your most preferred time slots from your previous selections.");
+            });
+        
+            // Mouse events for cell selection
+            $('.table td').mousedown(function(e) {
+                if (!selectionAllowed && !reselectPhase) return; // Prevent action if neither phase is active
+        
+                e.preventDefault();
+                isDragging = true;
+                if (reselectPhase && $(this).hasClass('highlight')) {
+                    // Determine the action based on the cell's current state at the start of the drag
+                    dragStartState = 'select'; // We are starting the drag with the intention to select (turn green)
+                    $(this).addClass('green-highlight').removeClass('highlight'); // Apply green highlight immediately
                 }
-            }).mouseup(function() {
-                isSelecting = false; // Reset selecting state when the mouse is released
+            }).mouseenter(function() {
+                if (!isDragging) return; // Only proceed if dragging
+        
+                if (reselectPhase && dragStartState === 'select') {
+                    // If we started the drag with the intention to select, apply green highlight to previously highlighted cells
+                    if ($(this).hasClass('highlight') || $(this).hasClass('green-highlight')) {
+                        $(this).addClass('green-highlight').removeClass('highlight');
+                    }
+                } else if (selectionAllowed) {
+                    // In initial selection phase, toggle highlight normally
+                    $(this).toggleClass('highlight', selectionAllowed);
+                }
             });
-
-            // Prevent the selection mode from continuing to select or deselect after the user releases the mouse button
-            $(document).mouseup(function() {
-                isSelecting = false;
+        
+            $(document).on('mouseup', function() {
+                isDragging = false;
+                dragStartState = null; // Reset the drag start state
             });
+        
+            function resetSelection() {
+                $('.highlight, .green-highlight').removeClass('highlight green-highlight');
+                $('.table td').removeClass('gray-out');
+                selectionAllowed = true;
+                reselectPhase = false;
+                $('#nextButton').hide(); // Hide the Next button
+            }
         });
-</script>
+        </script>        
 </body>
 </html>
