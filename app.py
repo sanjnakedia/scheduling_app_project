@@ -16,7 +16,7 @@ def home():
 
 @app.route("/schedule")
 def scheduler():
-    return render_template("base2.html")
+    return render_template("base6.html")
 
 
 @app.route('/rankings', methods=['POST'])

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href='https://unpkg.com/fullcalendar@5/main.min.css' rel='stylesheet' />
+    <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -16,12 +18,12 @@
             text-align: center;
         }
         .highlight {
-            background-color:  rgb(44, 219, 53);
-            border-color:  black;
+            background-color: yellow;
+            border-color: orange;
             color: black;
         }
         td:hover {
-            background-color: #6fff82;
+            background-color: #ffff99;
         }
     </style>
 </head>
@@ -167,6 +169,7 @@
                     </tr>
                 </tbody>
             </table>
+            <div id='calendar'></div>
         <input type="hidden" name="selectedTimeBlocks" id="selectedTimeBlocksInput">
         <button id="proceedToRank" class="btn btn-primary mt-3">Proceed to Rank Selections</button>
         </form>
@@ -181,79 +184,133 @@
     <script>
         $(document).ready(function() {
             let isSelecting = false;
-        
+            let selectionMode = null; // Track if we are in selection or deselection mode
+
             $('#clearSelection').click(function() {
                 $('.highlight').removeClass('highlight');
-                displaySelectedTimeBlocks(); // Update time blocks display upon clearing
             });
-        
+
             $(document).keydown(function(e) {
                 if (e.key === "Escape") {
                     $('.highlight').removeClass('highlight');
-                    displaySelectedTimeBlocks(); // Update time blocks display upon escape key press
                 }
             });
-        
+
             $('.table td').mousedown(function(e) {
                 e.preventDefault();
                 isSelecting = true;
-                $(this).toggleClass('highlight');
-                displaySelectedTimeBlocks(); // Update time blocks display upon mouse down
+                // Determine the selection mode based on the first cell clicked
+                selectionMode = $(this).hasClass('highlight') ? 'deselect' : 'select';
+                // Toggle the first cell based on the selection mode
+                $(this).toggleClass('highlight', selectionMode === 'select');
             }).mouseenter(function() {
                 if (isSelecting) {
-                    $(this).addClass('highlight');
-                    displaySelectedTimeBlocks(); // Update time blocks display upon mouse enter
+                    // Add or remove highlight based on the selection mode
+                    $(this).toggleClass('highlight', selectionMode === 'select');
                 }
             }).mouseup(function() {
-                if (isSelecting) {
-                    displaySelectedTimeBlocks(); // Update time blocks display upon mouse up
-                }
-                isSelecting = false; // Ensure isSelecting is reset when the mouse is released
+                isSelecting = false; // Reset selecting state when the mouse is released
             });
 
-            $('#proceedToRank').click(function(event) {
-                event.preventDefault(); // Prevent form from submitting immediately
-                let selectedCells = $('.highlight').map(function() { return this.id; }).get();
-                $('#selectedTimeBlocksInput').val(JSON.stringify(selectedCells));
-                $(this).closest('form').submit(); // Submit the form programmatically
+            // Prevent the selection mode from continuing to select or deselect after the user releases the mouse button
+            $(document).mouseup(function() {
+                isSelecting = false;
             });
-
-                
-            function displaySelectedTimeBlocks() {
-                let selectedCells = $('.highlight').map(function() { return this.id; }).get();
-                $("#timeBlockList").empty();
-                selectedCells.forEach(function(cellId) {
-                    let parts = cellId.split('-');
-                    if(parts.length === 3) {
-                        let day = capitalizeFirstLetter(parts[0]);
-                        let startTime = parts[1];
-                        let endTime = parts[2];
-                        let readableBlock = `${day}: ${formatTimeRange(startTime, endTime)}`;
-                        $("#timeBlockList").append(`<li>${readableBlock}</li>`);
-                    }
-                });
-                if (selectedCells.length === 0) {
-                    $("#timeBlockList").append(`<li>No time blocks selected</li>`);
-                }
-            }
-        
-            function capitalizeFirstLetter(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
-        
-            function formatTimeRange(start, end) {
-                // Convert start and end times to a readable format
-                // This example simply appends AM/PM based on a 24-hour format assumption
-                // You might need to adjust this logic based on your specific needs
-                let startHour = parseInt(start);
-                let endHour = parseInt(end);
-                let startSuffix = startHour >= 12 ? 'PM' : 'AM';
-                let endSuffix = endHour >= 12 ? 'PM' : 'AM';
-                startHour = startHour > 12 ? startHour - 12 : startHour;
-                endHour = endHour > 12 ? endHour - 12 : endHour;
-                return `${startHour} ${startSuffix} - ${endHour} ${endSuffix}`;
-            }
         });
-    </script>        
+        document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek', // Provides a view with time slots
+        slotDuration: '00:15:00', // Change this to your desired granularity (e.g., 15-minute slots)
+        selectable: true,
+        selectHelper: true,
+        editable: true, // Allows dragging and resizing of events
+        select: function(selectionInfo) {
+            // You can handle the selected time block here
+            // For example, display it in a form field or use it to filter available slots
+            alert('Selected time: ' + selectionInfo.startStr + ' to ' + selectionInfo.endStr);
+        }
+        // Add more options as needed
+    });
+    calendar.render();
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        selectable: true,
+        selectHelper: true,
+        editable: true,
+
+        eventClick: function(info) {
+            // Prompt for confirmation to remove the event
+            if (confirm("Are you sure you want to delete this block?")) {
+                info.event.remove(); // Remove the event from the calendar
+            }
+        },
+        events: [
+            // Events go here
+            // You can also load events dynamically from a database if needed
+        ],
+        // Add more options as needed
+    });
+    calendar.render();
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        selectable: true,
+        selectHelper: true,
+        editable: true,
+        
+        eventClick: function(info) {
+            // Prompt for confirmation to remove the event
+            if (confirm("Are you sure you want to delete this block?")) {
+                info.event.remove(); // Remove the event from the calendar
+            }
+        },
+        events: [
+            // Events go here
+            // You can also load events dynamically from a database if needed
+        ],
+        // Add more options as needed
+    });
+    calendar.render();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        selectable: true,
+        editable: true, // Allows events to be dragged and resized
+        eventResizableFromStart: true, // Allows the event to be resized from the start
+        selectMirror: true,
+        select: function(info) {
+            // Add an event with no title directly where the user selects
+            calendar.addEvent({
+                start: info.start,
+                end: info.end,
+                allDay: info.allDay
+            });
+            calendar.unselect();
+        },
+        eventClick: function(info) {
+            // To delete the event on click
+            info.event.remove();
+        },
+        eventResize: function(info) {
+            // This callback will be called after an event is resized
+            console.log(info.event.start, info.event.end);
+        }
+        // Add more options and callbacks as needed
+    });
+    calendar.render();
+});
+
+
+
+</script>
 </body>
 </html>
