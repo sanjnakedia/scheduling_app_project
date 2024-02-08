@@ -11,12 +11,12 @@ def home():
     #schedule_times = schedule_times.query.all()
         return redirect("/schedule") 
     else: 
-        return render_template("home2.html")
+        return render_template("home3.html")
     
 
 @app.route("/schedule")
 def scheduler():
-    return render_template("base6.html")
+    return render_template("base8.html")
 
 
 @app.route('/rankings', methods=['POST'])
@@ -57,6 +57,21 @@ def submit_rankings():
     
     # Pass the sorted time blocks to the template
     return render_template('sorted_times.html', time_blocks=time_blocks)
+
+@app.route('/save-preferred-times', methods=['POST'])
+def save_preferred_times():
+    data = request.get_json()
+    preferred_times = data['preferredTimes']
+    # Process the preferred times, such as saving them to a database
+
+    # After processing, you can render a new template or redirect the user
+    # For simplicity, we'll just send back a URL to which the client will redirect
+    return jsonify(redirect_url=url_for('thank_you'))
+
+@app.route('/thank-you')
+def thank_you():
+    # You can pass the preferred times to the template or retrieve them from the database
+    return render_template('thank_you.html', preferred_times=session.get('preferred_times'))
 
 
 

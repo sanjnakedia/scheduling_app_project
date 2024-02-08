@@ -75,8 +75,25 @@
             });
 
             $('#finalizeSelections').click(function() {
-                savePreferredTimeSlots(calendar); // Save and display preferred slots
-            });
+    var preferredEvents = calendar.getEvents().filter(function(event) {
+        return event.extendedProps.isPreferred;
+    });
+
+    var preferredSlots = preferredEvents.map(function(event) {
+        return {
+            start: event.start.toISOString(),
+            end: event.end.toISOString(),
+            isPreferred: event.extendedProps.isPreferred
+        };
+    });
+
+    // Store the preferred slots in localStorage
+    localStorage.setItem('preferredTimeSlots', JSON.stringify(preferredSlots));
+
+    // Navigate to the thank you page
+    window.location.href = '/static/thank_you.html';
+});
+
         });
 
         function savePreferredTimeSlots(calendar) {

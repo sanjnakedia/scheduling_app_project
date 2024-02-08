@@ -34,26 +34,54 @@
             var selectionsLocked = false; // Track whether selections are locked
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
-                slotDuration: '00:15:00',
-                selectable: true,
-                editable: true,
+    slotDuration: '00:15:00',
+    selectable: true,
+    editable: true, // Allows dragging and resizing
+    eventResizableFromStart: true, // Allows resizing from the event's start
+    eventDurationEditable: true, // Allows event durations to be editable
+    eventStartEditable: true, // Allows events to be draggable
+    
                 select: function(info) {
                     if (selectionsLocked) {
                         console.log("Selections are locked. No more selections allowed.");
                         calendar.unselect();
                         return;
                     }
-                    calendar.addEvent({
-                        start: info.start,
-                        end: info.end,
-                        allDay: info.allDay,
-                        backgroundColor: '#ff9f89', // Initial color for selections
-                        extendedProps: {
-                            isPreferred: false // Custom property
-                        }
-                    });
-                    calendar.unselect();
-                },
+            // Find any events that overlap with the selected time slot
+            var overlappingEvents = calendar.getEvents().filter(function(event) {
+                return (event.start < info.end && event.end > info.start);
+            });
+
+            var newEventStart = info.start;
+            var newEventEnd = info.end;
+
+            // Determine the earliest start and the latest end from the overlapping events
+            if (overlappingEvents.length > 0) {
+                overlappingEvents.forEach(function(event) {
+                    if (event.start < newEventStart) {
+                        newEventStart = event.start;
+                    }
+                    if (event.end > newEventEnd) {
+                        newEventEnd = event.end;
+                    }
+                    event.remove(); // Remove overlapping events
+                });
+            }
+
+            // Add a new event with the merged time range
+            calendar.addEvent({
+                start: newEventStart,
+                end: newEventEnd,
+                allDay: info.allDay,
+                backgroundColor: '#ff9f89', // Use the initial color for selections
+                extendedProps: {
+                    isPreferred: false // Custom property for preferred status
+                }
+            });
+
+            calendar.unselect(); // Clear the current selection
+        },
+
                 eventClick: function(info) {
                     if (selectionsLocked) {
                         // Toggle preferred state and color on click
@@ -61,6 +89,10 @@
                         info.event.setExtendedProp('isPreferred', !isPreferred);
                         info.event.setProp('backgroundColor', !isPreferred ? '#4CAF50' : '#ff9f89');
                     }
+                    if (!selectionsLocked) {
+        // Remove the event on click only if selections are not locked
+        info.event.remove();
+    }
                 },
                 eventDrop: function(info) { if (selectionsLocked) info.revert(); },
                 eventResize: function(info) { if (selectionsLocked) info.revert(); },
@@ -75,8 +107,25 @@
             });
 
             $('#finalizeSelections').click(function() {
-                savePreferredTimeSlots(calendar); // Save and display preferred slots
-            });
+    var preferredEvents = calendar.getEvents().filter(function(event) {
+        return event.extendedProps.isPreferred;
+    });
+
+    var preferredSlots = preferredEvents.map(function(event) {
+        return {
+            start: event.start.toISOString(),
+            end: event.end.toISOString(),
+            isPreferred: event.extendedProps.isPreferred
+        };
+    });
+
+    // Store the preferred slots in localStorage
+    localStorage.setItem('preferredTimeSlots', JSON.stringify(preferredSlots));
+
+    // Navigate to the thank you page
+    window.location.href = '/static/thank_you.html';
+});
+
         });
 
         function savePreferredTimeSlots(calendar) {
