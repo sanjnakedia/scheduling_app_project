@@ -1,34 +1,34 @@
+#Necessary imports for the app 
 from flask import Flask, render_template, request, redirect, session, json, url_for
 app = Flask(__name__)
 
+#Homepage which contains form for user to input their name and time_zone 
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST": 
         name = request.form.get("name")
         time_zone = request.form.get("time_zone")  
-    #schedule_times = schedule_times.query.all()
+        #Once form is filled out and submitted, page redirects to schedule page
         return redirect("/schedule") 
     else: 
         return render_template("home3.html")
     
-
+#Schedule page --> Main page of the app 
 @app.route("/schedule")
 def scheduler():
     return render_template("base8.html")
 
+#Intermediary structure to save the preferred times inputted by user to display them on the thank you page at the end 
 @app.route('/save-preferred-times', methods=['POST'])
 def save_preferred_times():
     data = request.get_json()
     preferred_times = data['preferredTimes']
-    # Process the preferred times, such as saving them to a database
-
-    # After processing, you can render a new template or redirect the user
-    # For simplicity, we'll just send back a URL to which the client will redirect
+    #Redirects to the thank you template 
     return jsonify(redirect_url=url_for('thank_you'))
 
 @app.route('/thank-you')
 def thank_you():
-    # You can pass the preferred times to the template or retrieve them from the database
+    # Preferred times are transferred to the thank you template 
     return render_template('thank_you.html', preferred_times=session.get('preferred_times'))
 
 

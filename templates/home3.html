@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Integration Example</title>
     <meta charset="utf-8" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Styling for user form, heading, title, logo-->
     <style>
         .form-box {
-            background-color: #c9e4f0; /* Change this to your preferred box background */
+            background-color: #c9e4f0; 
             padding: 20px;
             border-radius: 8px;
-            margin-top: 30px; /* Margin from the top of the page */
+            margin-top: 30px; 
         }
         .heading-underline {
             width: 60px;
@@ -19,7 +19,7 @@
             margin-bottom: 20px;
         }
         body {
-            background-color: #e9f3f7; /* Change this to your preferred page background */
+            background-color: #e9f3f7; 
         }
         .logo-header {
             position: absolute;
@@ -30,21 +30,23 @@
             align-items: center;
         }
         .logo-header img {
-            width: 50px; /* Adjust logo size as needed */
-            margin-right: 10px; /* Space between logo and text */
+            width: 50px;
+            margin-right: 10px; /* space between logo and text */
         }
         .logo-header .logo-text {
-            font-size: 24px; /* Adjust text size as needed */
+            font-size: 24px; 
             font-weight: bold;
-            color: #333; /* Adjust text color as needed */
+            color: #333; 
         }
     </style>
 </head>
 <body>
     <div class="logo-header">
+        <!--Since we are using Flask, images must be saved in a static folder and accessed using Jinja templating-->
         <img src="{{ url_for('static', filename='img/doodle.png') }}" alt="Dog Logo">
         <div class="logo-text">Doodle Dogs</div>
     </div>
+    <!--Simple form created using Bootstrap notation where user inputs their name and selects timezone from dropdown-->
     <div class="container">
         <div class="d-flex justify-content-center">
             <div class="form-box">
@@ -66,6 +68,7 @@
                         </select>
                     </div>
                     <br>
+                    <!--Clicking this submit button will trigger the redirect to the schedule page-->
                     <button class="btn btn-secondary" type="submit">Submit</button>
                 </form>
             </div>
