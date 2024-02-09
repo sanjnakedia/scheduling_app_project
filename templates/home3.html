@@ -4,12 +4,51 @@
     <title>Integration Example</title>
     <meta charset="utf-8" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-box {
+            background-color: #c9e4f0; /* Change this to your preferred box background */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px; /* Margin from the top of the page */
+        }
+        .heading-underline {
+            width: 60px;
+            height: 2px;
+            background-color: #d1d1d1;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+        body {
+            background-color: #e9f3f7; /* Change this to your preferred page background */
+        }
+        .logo-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .logo-header img {
+            width: 50px; /* Adjust logo size as needed */
+            margin-right: 10px; /* Space between logo and text */
+        }
+        .logo-header .logo-text {
+            font-size: 24px; /* Adjust text size as needed */
+            font-weight: bold;
+            color: #333; /* Adjust text color as needed */
+        }
+    </style>
 </head>
 <body>
-    <div class="d-flex justify-content-center">
-        <div class="row dark text-center">
-            <div class="narrow text-center">
-                <div class="col-12">
+    <div class="logo-header">
+        <img src="{{ url_for('static', filename='img/doodle.png') }}" alt="Dog Logo">
+        <div class="logo-text">Doodle Dogs</div>
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="form-box">
+                <div class="text-center">
                     <h3 class="heading">Enter Your Information!</h3>
                     <div class="heading-underline"></div>
                 </div>
@@ -32,9 +71,5 @@
             </div>
         </div>
     </div>
-
-    <div class="fixed-wrap">
-        <div class="fixed"></div>
-    </div>
-    </body>
+</body>
 </html>

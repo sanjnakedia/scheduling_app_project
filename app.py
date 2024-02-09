@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, session, json, url_for
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST": 
         name = request.form.get("name")
-        calendar = request.form.get("calendar")
         time_zone = request.form.get("time_zone")  
     #schedule_times = schedule_times.query.all()
         return redirect("/schedule") 
@@ -18,26 +16,42 @@ def home():
 def scheduler():
     return render_template("base8.html")
 
+@app.route('/save-preferred-times', methods=['POST'])
+def save_preferred_times():
+    data = request.get_json()
+    preferred_times = data['preferredTimes']
+    # Process the preferred times, such as saving them to a database
 
-@app.route('/rankings', methods=['POST'])
-def rankings():
+    # After processing, you can render a new template or redirect the user
+    # For simplicity, we'll just send back a URL to which the client will redirect
+    return jsonify(redirect_url=url_for('thank_you'))
+
+@app.route('/thank-you')
+def thank_you():
+    # You can pass the preferred times to the template or retrieve them from the database
+    return render_template('thank_you.html', preferred_times=session.get('preferred_times'))
+
+
+
+#@app.route('/rankings', methods=['POST'])
+#def rankings():
     selected_time_blocks_str = request.form.get('selectedTimeBlocks', '[]')  # Default to an empty list as a string if not found
     selected_time_blocks = json.loads(selected_time_blocks_str)  # Parse the JSON string into a Python list
 
     return render_template('rank.html', selected_time_blocks=selected_time_blocks)
 
-@app.route('/rank')
-def rank():
-    return render_template('rank.html')
+#@app.route('/rank')
+#def rank():
+#    return render_template('rank.html')
 
-@app.route('/results')
-def results():
+#@app.route('/results')
+#def results():
     # This route would handle displaying the rankings.
     # You might retrieve the rankings from localStorage or wherever they are stored.
     return render_template('results.html')
     
-@app.route('/submit-rankings', methods=['POST'])
-def submit_rankings():
+#@app.route('/submit-rankings', methods=['POST'])
+#def submit_rankings():
     print("Form data:", request.form)
     # Example data structure to hold the sorted time blocks
     time_blocks = {
@@ -57,34 +71,3 @@ def submit_rankings():
     
     # Pass the sorted time blocks to the template
     return render_template('sorted_times.html', time_blocks=time_blocks)
-
-@app.route('/save-preferred-times', methods=['POST'])
-def save_preferred_times():
-    data = request.get_json()
-    preferred_times = data['preferredTimes']
-    # Process the preferred times, such as saving them to a database
-
-    # After processing, you can render a new template or redirect the user
-    # For simplicity, we'll just send back a URL to which the client will redirect
-    return jsonify(redirect_url=url_for('thank_you'))
-
-@app.route('/thank-you')
-def thank_you():
-    # You can pass the preferred times to the template or retrieve them from the database
-    return render_template('thank_you.html', preferred_times=session.get('preferred_times'))
-
-
-
-#class Schedule
-
-
-#class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    complete = db.Column(db.Boolean)
-
-
-#class Schedule(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    complete = db.Column(db.Boolean)
