@@ -7,10 +7,10 @@
     <title>Thank You</title>
     <style>
         body {
-            font-family: 'Lato', sans-serif; /* Updated to Lato for consistency */
+            font-family: 'Lato', sans-serif;
             margin: 0;
             padding: 40px;
-            background: #e9f3f7; /* Light blue background for consistency */
+            background: #e9f3f7; /* light blue background for consistency with website */
             color: #333;
             text-align: center;
         }
@@ -23,13 +23,13 @@
             align-items: center;
         }
         .logo-header img {
-            width: 50px; /* Adjust logo size as needed */
-            margin-right: 10px; /* Space between logo and text */
+            width: 50px; /* logo size adjust */
+            margin-right: 10px; /* The space between logo and text */
         }
         .logo-header .logo-text {
-            font-size: 24px; /* Adjust text size as needed */
+            font-size: 24px; 
             font-weight: bold;
-            color: #333; /* Adjust text color as needed */
+            color: #333; 
         }
         h1, h2 {
             color: #333; /* More neutral color for text */
@@ -86,7 +86,7 @@
             // Retrieve the preferred time slots from localStorage
             var preferredSlots = JSON.parse(localStorage.getItem('preferredTimeSlots')) || [];
 
-            // Generate list items for each preferred time slot
+            // Generate list items for each preferred time slot to end up returning the items
             var listHtml = preferredSlots.map(function(slot) {
                 var startTime = new Date(slot.start).toLocaleString();
                 var endTime = new Date(slot.end).toLocaleString();
@@ -96,7 +96,7 @@
             // Display the preferred times
             document.getElementById('preferredTimesList').innerHTML = listHtml;
 
-            // Optionally clear localStorage if it's no longer needed
+            // Clear localStorage if it's no longer needed
             localStorage.removeItem('preferredTimeSlots');
         });
     </script>

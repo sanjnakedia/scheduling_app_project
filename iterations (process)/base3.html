@@ -28,7 +28,7 @@
         background-color: #cccccc !important;
         }
         .green-highlight {
-        background-color: #00FF00; /* Green background */
+        background-color: #00FF00;
         }
 </style>
 
@@ -186,15 +186,15 @@
         $(document).ready(function() {
             let isDragging = false; // Indicates if we are currently dragging
             let selectionAllowed = true; // Initially, selection is allowed
-            let reselectPhase = false; // Track reselection phase
-            let dragStartState = null; // Track the state at the start of the drag ('select' for green-highlight, null otherwise)
+            let reselectPhase = false; 
+            let dragStartState = null;
         
             // Clear Selection button logic
             $('#clearSelection').click(function() {
                 $('.highlight, .green-highlight').removeClass('highlight green-highlight');
                 $('.table td').removeClass('gray-out'); // Remove gray-out from all cells
                 selectionAllowed = true; // Re-enable selection
-                reselectPhase = false; // Reset reselection phase
+                reselectPhase = false;
             });
         
             // Save Selection button logic
@@ -208,25 +208,22 @@
         
             // Mouse events for cell selection
             $('.table td').mousedown(function(e) {
-                if (!selectionAllowed && !reselectPhase) return; // Prevent action if neither phase is active
+                if (!selectionAllowed && !reselectPhase) return;
         
                 e.preventDefault();
                 isDragging = true;
                 if (reselectPhase && $(this).hasClass('highlight')) {
-                    // Determine the action based on the cell's current state at the start of the drag
                     dragStartState = 'select'; // We are starting the drag with the intention to select (turn green)
                     $(this).addClass('green-highlight').removeClass('highlight'); // Apply green highlight immediately
                 }
             }).mouseenter(function() {
-                if (!isDragging) return; // Only proceed if dragging
+                if (!isDragging) return;
         
                 if (reselectPhase && dragStartState === 'select') {
-                    // If we started the drag with the intention to select, apply green highlight to previously highlighted cells
                     if ($(this).hasClass('highlight') || $(this).hasClass('green-highlight')) {
                         $(this).addClass('green-highlight').removeClass('highlight');
                     }
                 } else if (selectionAllowed) {
-                    // In initial selection phase, toggle highlight normally
                     $(this).toggleClass('highlight', selectionAllowed);
                 }
             });

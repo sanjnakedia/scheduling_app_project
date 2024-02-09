@@ -70,10 +70,12 @@
     </style>
 </head>
 <body>
+    <!--Same logo design as homepage-->
     <div class="logo-header">
         <img src="{{ url_for('static', filename='img/doodle.png') }}" alt="Dog Logo">
         <div class="logo-text">Doodle Dogs</div>
     </div>
+    <!--Instructions box which explains steps user has to take to navigate webpage-->
     <div class="instructions">
         <h4>Instructions:</h4>
         <ol>
@@ -83,6 +85,7 @@
             <li>Select your most preferred time blocks by clicking on it, and then submit your choices by pressing the "Finalize Selections" button.</li>
         </ol>
     </div>
+    <!--Buttons for saving selections and finalizing selections (initially hidden)-->
     <div class="container mt-5">
         <button id="saveSelections" class="btn btn-primary mb-3">Save Selections</button>
         <button id="finalizeSelections" class="btn btn-secondary mb-3" style="display:none;">Finalize Selections</button>
@@ -90,11 +93,14 @@
         <div id="preferredSlotsDisplay" class="mt-3"></div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!--Integrated full calendar script to make UI more user friendly and appealing-->
     <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
     <script>
+        /*Event listener which tracks different elements of the calendar (setting calendar view, smallest slot to be selected, 
+        and other booleans needed to change view based on buttons selected) */
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
-            var selectionsLocked = false; // Track whether selections are locked
+            var selectionsLocked = false; 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
                 slotDuration: '00:15:00',
@@ -103,14 +109,16 @@
                 eventResizableFromStart: true, // Allows resizing from the event's start
                 eventDurationEditable: true, // Allows event durations to be editable
                 eventStartEditable: true, // Allows events to be draggable
-    
+                
                 select: function(info) {
                     if (selectionsLocked) {
-                        console.log("Selections are locked. No more selections allowed.");
+                        //console.log("Selections are locked. No more selections allowed.");
                         calendar.unselect();
                         return;
                     }
-            // Find any events that overlap with the selected time slot
+
+            /* The overlapping event logic is to account for the scenario where a user tries to select a time block that overlaps with 
+            a previous one, and merges the two into an extended time block. */
             var overlappingEvents = calendar.getEvents().filter(function(event) {
                 return (event.start < info.end && event.end > info.start);
             });
@@ -118,7 +126,6 @@
             var newEventStart = info.start;
             var newEventEnd = info.end;
     
-            // Determine the earliest start and the latest end from the overlapping events
             if (overlappingEvents.length > 0) {
                 overlappingEvents.forEach(function(event) {
                     if (event.start < newEventStart) {
@@ -127,75 +134,80 @@
                     if (event.end > newEventEnd) {
                         newEventEnd = event.end;
                     }
-                    event.remove(); // Remove overlapping events
+                    event.remove(); 
                 });
             }
-    
-            // Add a new event with the merged time range
+
+            // Adding the event that the user selected for all cases (overlapping or not) with the light green color fill 
             calendar.addEvent({
                 start: newEventStart,
                 end: newEventEnd,
                 allDay: info.allDay,
-                backgroundColor: '#bae8bc', // Use the initial color for selections
+                backgroundColor: '#bae8bc', 
                 extendedProps: {
-                    isPreferred: false // Custom property for preferred status
+                    isPreferred: false //Before pressing the Save Selections button
                 }
             });
     
             calendar.unselect(); // Clear the current selection
         },
     
-                eventClick: function(info) {
+                
+            eventClick: function(info) {
+                //When selections are locked, users can click on time blocks and change it to 'isPreferred' which changes the color to dark green
                     if (selectionsLocked) {
-                        // Toggle preferred state and color on click
                         let isPreferred = info.event.extendedProps.isPreferred;
                         info.event.setExtendedProp('isPreferred', !isPreferred);
                         info.event.setProp('backgroundColor', !isPreferred ? '#4CAF50' : '#ff9f89');
                     }
+                //When selections are not locked, users can click on the time blocks to delete them
                     if (!selectionsLocked) {
-        // Remove the event on click only if selections are not locked
-        info.event.remove();
-    }
-                },
+
+                        info.event.remove();
+                }
+              
+            },
                 eventDrop: function(info) { if (selectionsLocked) info.revert(); },
                 eventResize: function(info) { if (selectionsLocked) info.revert(); },
             });
     
             calendar.render();
-    
+
+            /* When save selections button was clicked, selectionsLocked is set to true, the button is hidden,
+            the finalize selections button is shown, and an alert is sent to the user to pick the most preferred time slots. */
             $('#saveSelections').click(function() {
-                selectionsLocked = true; // Lock selections
-                 // Disable or hide the "Save Selections" button
-                 $(this).prop('disabled', true).hide(); // This line disables and hides the button
-    
-                // Show the "Finalize Selections" button
+                selectionsLocked = true; 
+                $(this).prop('disabled', true).hide(); 
                 $('#finalizeSelections').show();
     
                 alert("Selections are locked. Click on a selection to mark it as preferred.");
             });
-    
+
+
+            /* Chat GPT helped with the storing of the preferred slots into local storage and parsing the time blocks into text 
+            which could then be rendered on the thankyou template. */
             $('#finalizeSelections').click(function() {
-    var preferredEvents = calendar.getEvents().filter(function(event) {
-        return event.extendedProps.isPreferred;
-    });
-    
-    var preferredSlots = preferredEvents.map(function(event) {
-        return {
-            start: event.start.toISOString(),
-            end: event.end.toISOString(),
-            isPreferred: event.extendedProps.isPreferred
-        };
-    });
-    
-    // Store the preferred slots in localStorage
-    localStorage.setItem('preferredTimeSlots', JSON.stringify(preferredSlots));
-    
-    // Navigate to the thank you page
-    window.location.href = '/static/thank_you.html';
+                var preferredEvents = calendar.getEvents().filter(function(event) {
+                    return event.extendedProps.isPreferred;
+                });
+                
+                // Converts the preferred slots to strings of text 
+                var preferredSlots = preferredEvents.map(function(event) {
+                    return {
+                        start: event.start.toISOString(),
+                        end: event.end.toISOString(),
+                        isPreferred: event.extendedProps.isPreferred
+                    };
+                });
+                
+                localStorage.setItem('preferredTimeSlots', JSON.stringify(preferredSlots));
+                
+                window.location.href = '/static/thank_you.html';
     });
     
         });
     
+        // Filters events that are preferred, and puts the time slots into the appropriate text format
         function savePreferredTimeSlots(calendar) {
             var preferredEvents = calendar.getEvents().filter(function(event) {
                 return event.extendedProps.isPreferred;
